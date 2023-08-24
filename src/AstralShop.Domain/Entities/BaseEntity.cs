@@ -1,7 +1,8 @@
-﻿namespace AstralShop.Domain.Entities;
+﻿using AstralShop.Domain.Entities.Users;
+
+namespace AstralShop.Domain.Entities;
 
 public abstract class BaseEntity
 {
     public long Id { get; set; }
-    public Users User { get; set; }
 }

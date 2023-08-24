@@ -25,9 +25,18 @@ public class AstralShopDbContext : DbContext
 
     public DbSet<Order> Orders { get; set; }
 
+    public DbSet<OrderDetails> OrderDetails { get; set; }
+
     public DbSet<Product> Products { get; set; }
+
+    public DbSet<ProductComment> ProductComments { get; set; }
+
+    public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+
+    public DbSet<ProductSupplier> ProductSuppliers { get; set; }
 
     public DbSet<Supplier> Suppliers { get; set; }
 
     public DbSet<User> Users { get; set; }
+
 }
