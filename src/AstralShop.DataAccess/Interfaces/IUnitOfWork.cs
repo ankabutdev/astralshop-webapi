@@ -20,7 +20,15 @@ public interface IUnitOfWork
 
     public IRepository<Order> OrderRepository { get; }
 
+    public IRepository<OrderDetails> OrderDetailsRepository { get; }
+
     public IRepository<Product> ProductRepository { get; }
+
+    public IRepository<ProductComment> ProductCommentRepository { get; }
+
+    public IRepository<ProductDiscount> ProductDiscountRepository { get; }
+
+    public IRepository<ProductSupplier> ProductSupplierRepository { get; }
 
     public IRepository<User> UserRepository { get; }
 
