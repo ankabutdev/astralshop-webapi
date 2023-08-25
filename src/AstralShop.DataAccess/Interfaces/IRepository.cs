@@ -15,5 +15,7 @@ public interface IRepository<T> where T : Auditable
 
     public IQueryable<T> SelectAll(Expression<Func<T, bool>> expression = null!);
 
+    public Task<long> CountAsync();
+
     public Task SaveAsync();
 }
