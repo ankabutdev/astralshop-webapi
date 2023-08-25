@@ -2,6 +2,7 @@
 using AstralShop.DataAccess.Interfaces;
 using AstralShop.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace AstralShop.DataAccess.Repositories;
@@ -17,38 +18,44 @@ public class BaseRepository<T> : IRepository<T> where T : Auditable
         table = dbContext.Set<T>();
     }
 
-    public Task<long> CountAsync()
+    public async Task<T> AddAsync(T entity)
     {
-        throw new NotImplementedException();
+        await table.AddAsync(entity);
+        return entity;
     }
 
-    public Task<bool> CreateAsync(T entity)
+    public async Task<bool> DeleteAsync(Expression<Func<T, bool>> expression)
     {
-        throw new NotImplementedException();
+        var entity = await SelectAsync(expression);
+        if (entity is not null)
+        {
+            table.Remove(entity);
+            return true;
+        }
+        return false;
     }
 
-    public Task<bool> DeleteAsync(Expression<Func<T, bool>> expression)
+#pragma warning disable
+    public async Task<T> SelectAsync(Expression<Func<T, bool>> expression)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task SaveAsync()
-    {
-        throw new NotImplementedException();
+        return await table.FirstOrDefaultAsync(expression);
     }
 
     public IQueryable<T> SelectAll(Expression<Func<T, bool>> expression = null!)
     {
-        throw new NotImplementedException();
+        var query = this.table;
+        return query;
     }
 
-    public Task<T> SelectAsync(Expression<Func<T, bool>> expression)
+    public async Task<T> UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+        EntityEntry<T> entry = this.table.Update(entity);
+        return entry.Entity;
     }
 
-    public Task<bool> UpdateAsync(T entity)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<long> CountAsync() => 
+        await table.LongCountAsync();
+
+    public async Task SaveAsync() => 
+        await dbContext.SaveChangesAsync();
 }

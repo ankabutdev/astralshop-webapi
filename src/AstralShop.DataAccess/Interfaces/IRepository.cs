@@ -5,9 +5,9 @@ namespace AstralShop.DataAccess.Interfaces;
 
 public interface IRepository<T> where T : Auditable
 {
-    public Task<bool> CreateAsync(T entity);
+    public Task<T> AddAsync(T entity);
 
-    public Task<bool> UpdateAsync(T entity);
+    public Task<T> UpdateAsync(T entity);
 
     public Task<bool> DeleteAsync(Expression<Func<T, bool>> expression);
 
