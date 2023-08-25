@@ -17,6 +17,11 @@ public class BaseRepository<T> : IRepository<T> where T : Auditable
         table = dbContext.Set<T>();
     }
 
+    public Task<long> CountAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> CreateAsync(T entity)
     {
         throw new NotImplementedException();
