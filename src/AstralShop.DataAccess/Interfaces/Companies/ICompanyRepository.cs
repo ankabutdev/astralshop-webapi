@@ -3,7 +3,7 @@ using AstralShop.Domain.Entities.Companies;
 
 namespace AstralShop.DataAccess.Interfaces.Companies;
 
-public interface ICompanyRepository : IRepository<Company, Company>,
+public interface ICompanyRepository : IRepository<Company>,
     IGetAll<Company>
 {
 }

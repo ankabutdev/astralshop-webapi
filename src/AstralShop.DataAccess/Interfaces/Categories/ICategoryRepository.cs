@@ -3,7 +3,7 @@ using AstralShop.Domain.Entities.Categories;
 
 namespace AstralShop.DataAccess.Interfaces.Categories;
 
-public interface ICategoryRepository : IRepository<Category , Category>,
+public interface ICategoryRepository : IRepository<Category>,
     IGetAll<Category>
 {
 }
