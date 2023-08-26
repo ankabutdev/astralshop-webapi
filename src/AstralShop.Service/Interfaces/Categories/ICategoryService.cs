@@ -1,6 +1,8 @@
-﻿namespace AstralShop.Service.Interfaces.Categories;
+﻿using AstralShop.Service.DTOs.Categories;
+
+namespace AstralShop.Service.Interfaces.Categories;
 
 public interface ICategoryService
 {
-    public Task<bool> CreateAsync();
+    public Task<bool> CreateAsync(CategoryCreateDto dto);
 }

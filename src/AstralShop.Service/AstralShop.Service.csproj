@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -11,7 +11,6 @@
     <Folder Include="Common\Security\" />
     <Folder Include="Common\Validations\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,5 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AstralShop.DataAccess\AstralShop.DataAccess.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 </Project>
