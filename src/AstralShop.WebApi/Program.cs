@@ -19,7 +19,7 @@ var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-builder.Configuration["Serilog:WriteTo:0:Args:path"] = AppSettingHelper.GetLogFilePath();
+//builder.Configuration["Serilog:WriteTo:0:Args:path"] = AppSettingHelper.GetLogFilePath();
 
 //var logger = new LoggerConfiguration()
 //        .ReadFrom.Configuration(builder.Configuration)

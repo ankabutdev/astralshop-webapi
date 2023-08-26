@@ -21,6 +21,7 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Filters\" />
     <Folder Include="Configurations\" />
+    <Folder Include="wwwroot\media\images\" />
   </ItemGroup>
 
   <ItemGroup>
