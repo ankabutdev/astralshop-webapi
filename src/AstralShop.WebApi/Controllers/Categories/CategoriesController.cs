@@ -2,7 +2,7 @@
 using AstralShop.Service.Interfaces.Categories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AstralShop.WebApi.Controllers;
+namespace AstralShop.WebApi.Controllers.Categories;
 
 [Route("api/categories")]
 [ApiController]
@@ -12,7 +12,7 @@ public class CategoriesController : ControllerBase
 
     public CategoriesController(ICategoryService service)
     {
-        this._service = service;
+        _service = service;
     }
 
     [HttpPost]

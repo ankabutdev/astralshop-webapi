@@ -20,13 +20,13 @@ var configuration = new ConfigurationBuilder()
 
 builder.Configuration["Serilog:WriteTo:0:Args:path"] = AppSettingHelper.GetLogFilePath();
 
-var logger = new LoggerConfiguration()
-        .ReadFrom.Configuration(builder.Configuration)
-        .Enrich.FromLogContext()
-        .CreateLogger();
+//var logger = new LoggerConfiguration()
+//        .ReadFrom.Configuration(builder.Configuration)
+//        .Enrich.FromLogContext()
+//        .CreateLogger();
 
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+//builder.Logging.AddSerilog(logger);
 
 //builder.Services.AddCustomServices();
 
