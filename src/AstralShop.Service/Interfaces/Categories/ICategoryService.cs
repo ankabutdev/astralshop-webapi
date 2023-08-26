@@ -14,11 +14,11 @@ public interface ICategoryService
 
     Task<IEnumerable<CategoryResultDto>> GetAllQAsync();
 
-    Task<IEnumerable<CategoryResultDto>> GetByUserIdAsync(long userId);
+    Task<IEnumerable<CategoryResultDto>> GetByUserIdAsync(long id);
 
     Task<IEnumerable<CategoryResultDto>> GetByCategoryIdAsync(long categoryId);
 
-    Task<IEnumerable<CategoryResultDto>> SearchAsync(string searchTerm);
+    Task<IEnumerable<CategoryResultDto>> SearchAsync(string search);
 
     Task<bool> UpdateImageAsync(long id, string imagePath);
 }

@@ -1,6 +1,5 @@
 ﻿using AstralShop.DataAccess.Interfaces;
 using AstralShop.Domain.Entities.Categories;
-using AstralShop.Domain.Entities.Products;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
 using AutoMapper;
@@ -21,20 +20,18 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
     {
-        //var existingCategory = await _unitOfWork.CategoryRepository
-        //    .SelectAsync(x => x.Name == dto.Name);
-        //if (existingCategory != null)
-        //    throw new CategoryNotFoundException();
+        var existingCategory = await _unitOfWork.CategoryRepository
+            .SelectAsync(x => x.Name == dto.Name);
+        if (existingCategory != null)
+            throw new CategoryNotFoundException();
 
-        //var category = _mapper.Map<Category>(dto);
-        //var addedCategory = await _unitOfWork
-        //    .CategoryRepository.AddAsync(category);
-        //await _unitOfWork.SaveAsync();
+        var category = _mapper.Map<Category>(dto);
+        var addedCategory = await _unitOfWork
+            .CategoryRepository.AddAsync(category);
+        await _unitOfWork.SaveAsync();
 
-        //var resultDto = _mapper.Map<>(addedCategory);
-
-        throw new NotImplementedException();
-
+        var resultDto = _mapper.Map<CategoryResultDto>(addedCategory);
+        return resultDto;
     }
 
     public Task<bool> DeleteAsync(long id)

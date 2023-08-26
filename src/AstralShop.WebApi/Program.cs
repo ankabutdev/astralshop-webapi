@@ -1,4 +1,5 @@
 using AstralShop.DataAccess.Contexts;
+using AstralShop.WebApi.Extensions;
 using AstralShop.WebApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -25,10 +26,10 @@ builder.Configuration["Serilog:WriteTo:0:Args:path"] = AppSettingHelper.GetLogFi
 //        .Enrich.FromLogContext()
 //        .CreateLogger();
 
-builder.Logging.ClearProviders();
+//builder.Logging.ClearProviders();
 //builder.Logging.AddSerilog(logger);
 
-//builder.Services.AddCustomServices();
+builder.Services.AddCustomerService();
 
 var app = builder.Build();
 
