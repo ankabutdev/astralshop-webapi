@@ -1,4 +1,4 @@
-﻿using AstralShop.Domain.Entities.Categories;
+﻿using AstralShop.Service.DTOs.Categories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AstralShop.WebApi.Controllers;
@@ -7,8 +7,15 @@ namespace AstralShop.WebApi.Controllers;
 [ApiController]
 public class CategoriesController : ControllerBase
 {
+    private readonly IWebHostEnvironment _env;
+
+    public CategoriesController(IWebHostEnvironment env)
+    {
+        this._env = env;
+    }
+
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] Category category)
+    public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
     {
         return Ok();
     }
