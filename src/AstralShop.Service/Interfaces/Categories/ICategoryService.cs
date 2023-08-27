@@ -12,7 +12,7 @@ public interface ICategoryService
 
     Task<CategoryResultDto> GetByIdAsync(long id);
 
-    Task<IEnumerable<CategoryResultDto>> GetAllQAsync();
+    Task<IEnumerable<CategoryResultDto>> GetAllAsync();
 
     Task<IEnumerable<CategoryResultDto>> GetByUserIdAsync(long id);
 

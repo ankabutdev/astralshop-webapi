@@ -17,7 +17,9 @@ public class CategoriesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
-    {
-        return Ok(await _service.CreateAsync(dto));
-    }
+        => Ok(await _service.CreateAsync(dto));
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAsync(long id)
+        => Ok(await _service.DeleteAsync(id));
 }

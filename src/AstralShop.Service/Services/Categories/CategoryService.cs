@@ -1,5 +1,6 @@
 ﻿using AstralShop.DataAccess.Interfaces;
 using AstralShop.Domain.Entities.Categories;
+using AstralShop.Domain.Exceptions.Files;
 using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
@@ -47,12 +48,23 @@ public class CategoryService : ICategoryService
         return resultDto;
     }
 
-    public Task<bool> DeleteAsync(long id)
+    public async Task<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        var category = await _unitOfWork.CategoryRepository
+            .SelectAsync(x => x.Id == id);
+        if (category is null)
+            throw new CategoryNotFoundException();
+
+        var result = await _fileService.DeleteImageAsync(category.ImagePath);
+        if (result == false) throw new ImageNotFoundException();
+
+        var dbResult = await _unitOfWork.CategoryRepository.DeleteAsync(x => x == category);
+        await _unitOfWork.SaveAsync();
+
+        return dbResult;
     }
 
-    public Task<IEnumerable<CategoryResultDto>> GetAllQAsync()
+    public Task<IEnumerable<CategoryResultDto>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
