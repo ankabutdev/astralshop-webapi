@@ -15,15 +15,19 @@ public class CategoryService : ICategoryService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
+    private readonly IRepository<Category> _repository;
 
     public CategoryService(IUnitOfWork unitOfWork,
-        IMapper mapper, IFileService fileService)
+        IMapper mapper, IFileService fileService,
+        IRepository<Category> repository)
     {
         this._unitOfWork = unitOfWork;
         this._mapper = mapper;
         this._fileService = fileService;
+        this._repository = repository;
     }
 
+    public async Task<long> CountAsync() => await _repository.CountAsync();
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
     {
         var existingCategory = await _unitOfWork.CategoryRepository
@@ -69,24 +73,14 @@ public class CategoryService : ICategoryService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<CategoryResultDto>> GetByCategoryIdAsync(long categoryId)
+    public async Task<CategoryResultDto> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
-    }
+        var category = await _unitOfWork.CategoryRepository
+            .SelectAsync(x => x.Id == id);
+        if (category is null)
+            throw new CategoryNotFoundException();
 
-    public Task<CategoryResultDto> GetByIdAsync(long id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<CategoryResultDto>> GetByUserIdAsync(long userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<CategoryResultDto>> SearchAsync(string searchTerm)
-    {
-        throw new NotImplementedException();
+        return _mapper.Map<CategoryResultDto>(category);
     }
 
     public Task<CategoryResultDto> UpdateAsync(CategoryCreateDto dto)

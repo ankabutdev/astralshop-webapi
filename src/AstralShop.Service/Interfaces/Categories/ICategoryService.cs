@@ -14,11 +14,7 @@ public interface ICategoryService
 
     Task<IEnumerable<CategoryResultDto>> GetAllAsync();
 
-    Task<IEnumerable<CategoryResultDto>> GetByUserIdAsync(long id);
-
-    Task<IEnumerable<CategoryResultDto>> GetByCategoryIdAsync(long categoryId);
-
-    Task<IEnumerable<CategoryResultDto>> SearchAsync(string search);
+    public Task<long> CountAsync();
 
     Task<bool> UpdateImageAsync(long id, string imagePath);
 }
