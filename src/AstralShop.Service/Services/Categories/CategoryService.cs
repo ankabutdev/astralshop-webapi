@@ -1,11 +1,14 @@
 ﻿using AstralShop.DataAccess.Interfaces;
+using AstralShop.DataAccess.Utils;
 using AstralShop.Domain.Entities.Categories;
+using AstralShop.Domain.Exceptions.Categories;
 using AstralShop.Domain.Exceptions.Files;
 using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
 using AstralShop.Service.Interfaces.Common;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using QueHub.Domain.Exceptions.Categories;
 
 namespace AstralShop.Service.Services.Categories;
@@ -68,9 +71,18 @@ public class CategoryService : ICategoryService
         return dbResult;
     }
 
-    public Task<IEnumerable<CategoryResultDto>> GetAllAsync()
+    public async Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var categories = _unitOfWork.CategoryRepository.SelectAll();
+        var paginatedQuery = categories
+            .Skip(@params
+            .GetSkipCount())
+            .Take(@params.PageSize);
+
+        var resultDto = await paginatedQuery.ToListAsync();
+
+        return _mapper.Map<IEnumerable<CategoryResultDto>>(resultDto);
+
     }
 
     public async Task<CategoryResultDto> GetByIdAsync(long id)
@@ -83,9 +95,22 @@ public class CategoryService : ICategoryService
         return _mapper.Map<CategoryResultDto>(category);
     }
 
-    public Task<CategoryResultDto> UpdateAsync(CategoryCreateDto dto)
+    public async Task<CategoryResultDto> UpdateAsync(CategoryUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var existingCategory = await _unitOfWork.CategoryRepository.SelectAsync(x => x.Id == dto.Id);
+        if (existingCategory is null)
+            throw new CategoryNotFoundException();
+
+        var name = existingCategory.Name;
+        var existingCategory2 = await _unitOfWork.CategoryRepository.SelectAsync(x => x.Name == dto.Name);
+        if (name != dto.Name && existingCategory2 is not null)
+            throw new CategoryAlreadyExistsException();
+
+        _mapper.Map(dto, existingCategory);
+        await _unitOfWork.CategoryRepository.UpdateAsync(existingCategory);
+        await _unitOfWork.SaveAsync();
+
+        return _mapper.Map<CategoryResultDto>(existingCategory);
     }
 
     public Task<bool> UpdateImageAsync(long id, string imagePath)

@@ -10,20 +10,24 @@ namespace AstralShop.WebApi.Controllers.Categories;
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryService _service;
-    //private readonly int _maxPageSize = 30;
+    private readonly int _maxPageSize = 30;
 
     public CategoriesController(ICategoryService service)
     {
         _service = service;
     }
 
-    [HttpGet("count")]
-    public async Task<IActionResult> CountAsync()
-        => Ok(await _service.CountAsync());
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
+        => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
     [HttpGet("{categoryId}")]
     public async Task<IActionResult> GetByIdAsync(long categoryId)
-        => Ok(categoryId); //Ok(await _service.GetByIdAsync(categoryId));
+        => Ok(await _service.GetByIdAsync(categoryId));
+
+    [HttpGet("count")]
+    public async Task<IActionResult> CountAsync()
+        => Ok(await _service.CountAsync());
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
