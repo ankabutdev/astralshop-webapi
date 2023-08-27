@@ -1,7 +1,9 @@
 ﻿using AstralShop.DataAccess.Interfaces;
 using AstralShop.Domain.Entities.Categories;
+using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
+using AstralShop.Service.Interfaces.Common;
 using AutoMapper;
 using QueHub.Domain.Exceptions.Categories;
 
@@ -11,11 +13,14 @@ public class CategoryService : ICategoryService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
 
-    public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+    public CategoryService(IUnitOfWork unitOfWork,
+        IMapper mapper, IFileService fileService)
     {
         this._unitOfWork = unitOfWork;
         this._mapper = mapper;
+        this._fileService = fileService;
     }
 
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
@@ -25,12 +30,20 @@ public class CategoryService : ICategoryService
         if (existingCategory != null)
             throw new CategoryNotFoundException();
 
+        string imagePath = await _fileService.UploadImageAsync(dto.Image);
+
         var category = _mapper.Map<Category>(dto);
+
+        category.ImagePath = imagePath;
+
+        category.UpdatedAt = TimeHelper.GetDateTime();
+
         var addedCategory = await _unitOfWork
             .CategoryRepository.AddAsync(category);
         await _unitOfWork.SaveAsync();
 
         var resultDto = _mapper.Map<CategoryResultDto>(addedCategory);
+
         return resultDto;
     }
 
