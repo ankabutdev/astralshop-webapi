@@ -37,8 +37,8 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> DeleteAsync(long categoryId)
         => Ok(await _service.DeleteAsync(categoryId));
 
-    //[HttpPost]
-    //public async Task<IActionResult> UpdateAsync([FromForm] CategoryUpdateDto dto)
-    //    => Ok(await _service.UpdateAsync(dto));
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromForm] CategoryUpdateDto dto)
+        => Ok(await _service.UpdateAsync(dto));
 
 }

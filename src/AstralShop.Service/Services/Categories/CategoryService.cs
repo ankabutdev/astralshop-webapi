@@ -105,6 +105,8 @@ public class CategoryService : ICategoryService
         if (name != dto.Name && existingCategory2 is not null)
             throw new CategoryAlreadyExistsException();
 
+
+
         _mapper.Map(dto, existingCategory);
         await _unitOfWork.CategoryRepository.UpdateAsync(existingCategory);
         await _unitOfWork.SaveAsync();

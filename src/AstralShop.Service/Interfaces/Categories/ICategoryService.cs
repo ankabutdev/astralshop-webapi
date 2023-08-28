@@ -9,13 +9,13 @@ public interface ICategoryService
 
     public Task<CategoryResultDto> UpdateAsync(CategoryUpdateDto dto);
 
-    public Task<bool> DeleteAsync(long id);
+    public Task<bool> DeleteAsync(long categoryId);
 
-    Task<CategoryResultDto> GetByIdAsync(long id);
+    Task<CategoryResultDto> GetByIdAsync(long categoryId);
 
     Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params);
 
     public Task<long> CountAsync();
 
-    Task<bool> UpdateImageAsync(long id, string imagePath);
+    Task<bool> UpdateImageAsync(long categoryId, string imagePath);
 }

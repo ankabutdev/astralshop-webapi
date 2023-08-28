@@ -10,5 +10,5 @@ public class CategoryUpdateDto
 
     public string Description { get; set; } = string.Empty;
 
-    public IFormFile Image { get; set; } = default!;
+    public IFormFile? ImagePath { get; set; }
 }
