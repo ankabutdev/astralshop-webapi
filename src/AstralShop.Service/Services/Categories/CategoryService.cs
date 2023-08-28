@@ -28,7 +28,7 @@ public class CategoryService : ICategoryService
         this._fileService = fileService;
     }
 
-    public async Task<long> CountAsync() =>
+    public Task<long> CountAsync() =>
        _unitOfWork.CategoryRepository.SelectAll().Count();
 
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
