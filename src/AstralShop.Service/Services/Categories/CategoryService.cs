@@ -31,6 +31,7 @@ public class CategoryService : ICategoryService
     }
 
     public async Task<long> CountAsync() => await _repository.CountAsync();
+
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
     {
         var existingCategory = await _unitOfWork.CategoryRepository
