@@ -37,25 +37,20 @@ public class BaseRepository<T> : IRepository<T> where T : Auditable
 
 #pragma warning disable
     public async Task<T> SelectAsync(Expression<Func<T, bool>> expression)
-    {
-        return await table.FirstOrDefaultAsync(expression);
-    }
+        => await table.FirstOrDefaultAsync(expression);
 
-    public IQueryable<T> SelectAll(Expression<Func<T, bool>> expression = null!)
-    {
-        var query = this.table;
-        return query;
-    }
+    public IQueryable<T> SelectAll(Expression<Func<T, bool>> expression = null)
+        => expression is null ? table : table.Where(expression);
 
     public async Task<T> UpdateAsync(T entity)
     {
-        EntityEntry<T> entry = this.table.Update(entity);
+        EntityEntry<T> entry = table.Update(entity);
         return entry.Entity;
     }
 
-    public async Task<long> CountAsync() => 
+    public async Task<long> CountAsync() =>
         await table.LongCountAsync();
 
-    public async Task SaveAsync() => 
+    public async Task SaveAsync() =>
         await dbContext.SaveChangesAsync();
 }

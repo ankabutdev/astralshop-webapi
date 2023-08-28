@@ -18,7 +18,6 @@ public class CategoryService : ICategoryService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IFileService _fileService;
-    private readonly IRepository<Category> _repository;
 
     public CategoryService(IUnitOfWork unitOfWork,
         IMapper mapper, IFileService fileService,
@@ -27,10 +26,10 @@ public class CategoryService : ICategoryService
         this._unitOfWork = unitOfWork;
         this._mapper = mapper;
         this._fileService = fileService;
-        this._repository = repository;
     }
 
-    public async Task<long> CountAsync() => await _repository.CountAsync();
+    public async Task<long> CountAsync() =>
+       _unitOfWork.CategoryRepository.SelectAll().Count();
 
     public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
     {
@@ -83,7 +82,6 @@ public class CategoryService : ICategoryService
         var resultDto = await paginatedQuery.ToListAsync();
 
         return _mapper.Map<IEnumerable<CategoryResultDto>>(resultDto);
-
     }
 
     public async Task<CategoryResultDto> GetByIdAsync(long id)
