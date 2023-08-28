@@ -8,5 +8,5 @@ public class CategoryResultDto
 
     public string Description { get; set; } = string.Empty;
 
-    public string Image { get; set; } = string.Empty;
+    public string ImagePath { get; set; } = string.Empty;
 }
