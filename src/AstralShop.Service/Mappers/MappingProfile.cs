@@ -14,7 +14,11 @@ public class MappingProfile : Profile
         CreateMap<Category, CategoryUpdateDto>().ReverseMap();
         CreateMap<Category, CategoryResultDto>().ReverseMap();
 
+        CreateMap<CategoryCreateDto, CategoryUpdateDto>().ReverseMap();
+        CreateMap<CategoryCreateDto, CategoryResultDto>().ReverseMap();
 
+        CreateMap<CategoryResultDto, CategoryUpdateDto>().ReverseMap();
+        CreateMap<CategoryResultDto, CategoryCreateDto>().ReverseMap();
         // ...
     }
 }

@@ -10,6 +10,7 @@ using AstralShop.Service.Interfaces.Common;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QueHub.Domain.Exceptions.Categories;
+using QueHub.Domain.Exceptions.Users;
 
 namespace AstralShop.Service.Services.Categories;
 
@@ -95,26 +96,51 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryResultDto> UpdateAsync(CategoryUpdateDto dto)
     {
-        var existingCategory = await _unitOfWork.CategoryRepository.SelectAsync(x => x.Id == dto.Id);
-        if (existingCategory is null)
-            throw new CategoryNotFoundException();
+        var category = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Id == dto.Id);
+        if (category is null)
+            throw new UserNotFoundException();
 
-        var name = existingCategory.Name;
-        var existingCategory2 = await _unitOfWork.CategoryRepository.SelectAsync(x => x.Name == dto.Name);
-        if (name != dto.Name && existingCategory2 is not null)
+        var categoryname = category.Name;
+        var existingUser2 = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Name == dto.Name);
+        if (categoryname != dto.Name && existingUser2 is not null)
             throw new CategoryAlreadyExistsException();
 
+        //////////////////////////////////////////////////////////////////////////////----------------------------------------------------------------------------------------------
+        if (dto.ImagePath is not null)
+        {
+            // Delete old image
+            var deleteResult = await _fileService.DeleteImageAsync(category.ImagePath);
+            if (!deleteResult)
+                throw new ImageNotFoundException();
 
+            // Upload new image
+            string newImagePath = await _fileService.UploadImageAsync(dto.ImagePath);
 
-        _mapper.Map(dto, existingCategory);
-        await _unitOfWork.CategoryRepository.UpdateAsync(existingCategory);
+            // Update the image path in the category
+            category.ImagePath = newImagePath;
+            category.UpdatedAt = TimeHelper.GetDateTime();
+        }
+        // else category old image have to save
+        
+
+        /////////////////////////////////////////////////////////////////////-------------------------------------------------------------------------------------------------------------
+        _mapper.Map(dto, category);
+        await _unitOfWork.CategoryRepository.UpdateAsync(category);
         await _unitOfWork.SaveAsync();
-
-        return _mapper.Map<CategoryResultDto>(existingCategory);
+        
+        return _mapper.Map<CategoryResultDto>(category);
     }
 
-    public Task<bool> UpdateImageAsync(long id, string imagePath)
+    public async Task<bool> UpdateImageAsync(long id, string imagePath)
     {
-        throw new NotImplementedException();
+        var category = await _unitOfWork.CategoryRepository.SelectAsync(x => x.Id == id);
+        if (category is null)
+            throw new CategoryNotFoundException();
+
+        category.ImagePath = imagePath;
+        await _unitOfWork.CategoryRepository.UpdateAsync(category);
+        await _unitOfWork.SaveAsync();
+
+        return true;
     }
 }
