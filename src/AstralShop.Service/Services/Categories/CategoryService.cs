@@ -20,8 +20,7 @@ public class CategoryService : ICategoryService
     private readonly IFileService _fileService;
 
     public CategoryService(IUnitOfWork unitOfWork,
-        IMapper mapper, IFileService fileService,
-        IRepository<Category> repository)
+        IMapper mapper, IFileService fileService)
     {
         this._unitOfWork = unitOfWork;
         this._mapper = mapper;
