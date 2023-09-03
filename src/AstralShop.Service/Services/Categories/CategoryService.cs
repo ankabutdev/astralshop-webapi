@@ -10,7 +10,6 @@ using AstralShop.Service.Interfaces.Common;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QueHub.Domain.Exceptions.Categories;
-using QueHub.Domain.Exceptions.Users;
 
 namespace AstralShop.Service.Services.Categories;
 
@@ -98,14 +97,15 @@ public class CategoryService : ICategoryService
     {
         var category = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Id == dto.Id);
         if (category is null)
-            throw new UserNotFoundException();
+            throw new CategoryNotFoundException();
 
         var categoryname = category.Name;
         var existingUser2 = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Name == dto.Name);
         if (categoryname != dto.Name && existingUser2 is not null)
             throw new CategoryAlreadyExistsException();
 
-        //////////////////////////////////////////////////////////////////////////////----------------------------------------------------------------------------------------------
+        string newImagePath = category.ImagePath;
+
         if (dto.ImagePath is not null)
         {
             // Delete old image
@@ -114,20 +114,18 @@ public class CategoryService : ICategoryService
                 throw new ImageNotFoundException();
 
             // Upload new image
-            string newImagePath = await _fileService.UploadImageAsync(dto.ImagePath);
-
-            // Update the image path in the category
-            category.ImagePath = newImagePath;
-            category.UpdatedAt = TimeHelper.GetDateTime();
+            newImagePath = await _fileService.UploadImageAsync(dto.ImagePath);
         }
         // else category old image have to save
-        
 
-        /////////////////////////////////////////////////////////////////////-------------------------------------------------------------------------------------------------------------
         _mapper.Map(dto, category);
+
+        category.UpdatedAt = TimeHelper.GetDateTime();
+        category.ImagePath = newImagePath;
+
         await _unitOfWork.CategoryRepository.UpdateAsync(category);
         await _unitOfWork.SaveAsync();
-        
+
         return _mapper.Map<CategoryResultDto>(category);
     }
 
