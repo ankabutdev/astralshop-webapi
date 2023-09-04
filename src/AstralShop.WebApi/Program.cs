@@ -1,18 +1,17 @@
 using AstralShop.DataAccess.Contexts;
 using AstralShop.WebApi.Extensions;
-using AstralShop.WebApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// ->
 builder.Services.AddDbContext<AstralShopDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -30,6 +29,7 @@ var configuration = new ConfigurationBuilder()
 //builder.Logging.AddSerilog(logger);
 
 builder.Services.AddCustomerService();
+// ->
 
 var app = builder.Build();
 
@@ -41,9 +41,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

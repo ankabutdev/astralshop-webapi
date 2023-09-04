@@ -1,4 +1,6 @@
-﻿namespace QueHub.Domain.Exceptions.Categories;
+﻿using AstralShop.Domain.Exceptions;
+
+namespace AstralShop.Domain.Exceptions.Categories;
 
 public class CategoryNotFoundException : NotFoundException
 {

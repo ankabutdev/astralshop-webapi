@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace QueHub.Domain.Exceptions;
+namespace AstralShop.Domain.Exceptions;
 
 public class NotFoundException : Exception
 {

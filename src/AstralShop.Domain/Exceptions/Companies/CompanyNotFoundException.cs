@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Companies;
+﻿namespace AstralShop.Domain.Exceptions.Companies;
 
 public class CompanyNotFoundException : NotFoundException
 {

@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Deliveries;
+﻿namespace AstralShop.Domain.Exceptions.Deliveries;
 
 public class DeliveryNotFoundException : NotFoundException
 {
