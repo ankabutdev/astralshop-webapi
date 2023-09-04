@@ -1,6 +1,4 @@
-﻿using AstralShop.Domain.Exceptions;
-
-namespace AstralShop.Domain.Exceptions.Categories;
+﻿namespace AstralShop.Domain.Exceptions.Categories;
 
 public class CategoryAlreadyExistsException : NotFoundException
 {

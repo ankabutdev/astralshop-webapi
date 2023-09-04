@@ -1,6 +1,4 @@
-﻿using AstralShop.Domain.Exceptions;
-
-namespace AstralShop.Domain.Exceptions.Files;
+﻿namespace AstralShop.Domain.Exceptions.Files;
 
 public class ImageNotFoundException : NotFoundException
 {
