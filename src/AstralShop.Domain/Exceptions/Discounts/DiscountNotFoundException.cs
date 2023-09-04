@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Discounts;
+﻿namespace AstralShop.Domain.Exceptions.Discounts;
 
 public class DiscountNotFoundException : NotFoundException
 {

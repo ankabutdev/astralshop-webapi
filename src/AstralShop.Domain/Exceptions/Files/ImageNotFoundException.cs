@@ -1,4 +1,4 @@
-﻿using QueHub.Domain.Exceptions;
+﻿using AstralShop.Domain.Exceptions;
 
 namespace AstralShop.Domain.Exceptions.Files;
 

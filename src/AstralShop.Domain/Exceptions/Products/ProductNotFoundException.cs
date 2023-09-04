@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Products;
+﻿namespace AstralShop.Domain.Exceptions.Products;
 
 public class ProductNotFoundException : NotFoundException
 {
