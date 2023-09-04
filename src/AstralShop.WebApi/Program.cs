@@ -1,5 +1,6 @@
 using AstralShop.DataAccess.Contexts;
 using AstralShop.WebApi.Extensions;
+using AstralShop.WebApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -27,7 +28,6 @@ var configuration = new ConfigurationBuilder()
 
 //builder.Logging.ClearProviders();
 //builder.Logging.AddSerilog(logger);
-
 builder.Services.AddCustomerService();
 // ->
 
