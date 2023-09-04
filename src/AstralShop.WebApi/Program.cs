@@ -1,8 +1,6 @@
 using AstralShop.DataAccess.Contexts;
 using AstralShop.WebApi.Extensions;
-using AstralShop.WebApi.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
