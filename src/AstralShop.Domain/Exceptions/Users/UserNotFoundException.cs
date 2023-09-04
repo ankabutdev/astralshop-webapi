@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Users;
+﻿namespace AstralShop.Domain.Exceptions.Users;
 
 public class UserNotFoundException : NotFoundException
 {

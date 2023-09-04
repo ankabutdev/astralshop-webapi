@@ -9,7 +9,6 @@ using AstralShop.Service.Interfaces.Categories;
 using AstralShop.Service.Interfaces.Common;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using QueHub.Domain.Exceptions.Categories;
 
 namespace AstralShop.Service.Services.Categories;
 

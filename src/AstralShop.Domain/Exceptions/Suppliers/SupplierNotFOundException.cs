@@ -1,4 +1,4 @@
-﻿namespace QueHub.Domain.Exceptions.Suppliers;
+﻿namespace AstralShop.Domain.Exceptions.Suppliers;
 
 public class SupplierNotFOundException : NotFoundException
 {
