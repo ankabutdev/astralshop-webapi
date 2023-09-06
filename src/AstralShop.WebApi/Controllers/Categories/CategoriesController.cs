@@ -1,5 +1,4 @@
 ﻿using AstralShop.DataAccess.Utils;
-using AstralShop.Domain.Exceptions.Categories;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
 using Microsoft.AspNetCore.Mvc;
