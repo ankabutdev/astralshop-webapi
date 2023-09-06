@@ -1,4 +1,5 @@
 ﻿using AstralShop.DataAccess.Utils;
+using AstralShop.Domain.Exceptions.Categories;
 using AstralShop.Service.DTOs.Categories;
 using AstralShop.Service.Interfaces.Categories;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ public class CategoriesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
-        => Ok(await _service.CreateAsync(dto));
+        => Accepted(await _service.CreateAsync(dto));
 
     [HttpDelete("{categoryId}")]
     public async Task<IActionResult> DeleteAsync(long categoryId)
