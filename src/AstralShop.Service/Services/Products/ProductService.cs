@@ -63,9 +63,17 @@ public class ProductService : IProductService
         return dbResult;
     }
 
-    public Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var products = _unitOfWork.ProductRepository.SelectAll();
+        var paginationQuery = products
+            .Skip(@params
+            .GetSkipCount())
+            .Take(@params.PageSize);
+
+        var resultDto = await paginationQuery.ToListAsync();
+
+        return _mapper.Map<IEnumerable<ProductResultDto>>(resultDto);
     }
 
     public async Task<ProductResultDto> GetByIdAsync(long productId)
@@ -118,8 +126,17 @@ public class ProductService : IProductService
         return _mapper.Map<ProductResultDto>(product);
     }
 
-    public Task<bool> UpdateImageAsync(long productId, string imagePath)
+    public async Task<bool> UpdateImageAsync(long productId, string imagePath)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.ProductRepository
+            .SelectAsync(x => x.Id == productId);
+        if (product is null)
+            throw new ProductNotFoundException();
+
+        product.ImagePath = imagePath;
+        await _unitOfWork.ProductRepository.UpdateAsync(product);
+        await _unitOfWork.SaveAsync();
+
+        return true;
     }
 }
