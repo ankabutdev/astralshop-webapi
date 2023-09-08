@@ -1,6 +1,7 @@
 ﻿using AstralShop.DataAccess.Interfaces;
 using AstralShop.DataAccess.Utils;
 using AstralShop.Domain.Entities.Products;
+using AstralShop.Domain.Exceptions.Files;
 using AstralShop.Domain.Exceptions.Products;
 using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Products;
@@ -77,9 +78,44 @@ public class ProductService : IProductService
         return _mapper.Map<ProductResultDto>(product);
     }
 
-    public Task<ProductResultDto> UpdateAsync(ProductUpdateDto dto)
+    public async Task<ProductResultDto> UpdateAsync(ProductUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.ProductRepository
+            .SelectAsync(x => x.Id == dto.Id);
+        if (product is null)
+            throw new ProductNotFoundException();
+
+        var productName = product.Name;
+        var existingProduct = await _unitOfWork.ProductRepository
+            .SelectAsync(x => x.Name == dto.Name);
+
+        if (productName != dto.Name && existingProduct is not null)
+            throw new ProductAlreadyExistsException();
+
+        string newImagePath = product.ImagePath;
+
+        if (dto.ImagePath is not null)
+        {
+            // Delete old image
+            var deleteResult = await _fileService.DeleteImageAsync(product.ImagePath);
+
+            if (!deleteResult)
+                throw new ImageNotFoundException();
+
+            // Upload new image
+            newImagePath = await _fileService.UploadImageAsync(dto.ImagePath);
+        }
+        // else product old image have to save
+
+        _mapper.Map(dto, product);
+
+        product.UpdatedAt = TimeHelper.GetDateTime();
+        product.ImagePath = newImagePath;
+
+        await _unitOfWork.ProductRepository.UpdateAsync(product);
+        await _unitOfWork.SaveAsync();
+
+        return _mapper.Map<ProductResultDto>(product);
     }
 
     public Task<bool> UpdateImageAsync(long productId, string imagePath)

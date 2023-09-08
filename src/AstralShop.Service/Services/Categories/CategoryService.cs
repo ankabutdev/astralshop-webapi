@@ -99,8 +99,8 @@ public class CategoryService : ICategoryService
             throw new CategoryNotFoundException();
 
         var categoryname = category.Name;
-        var existingUser2 = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Name == dto.Name);
-        if (categoryname != dto.Name && existingUser2 is not null)
+        var existingcategory = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Name == dto.Name);
+        if (categoryname != dto.Name && existingcategory is not null)
             throw new CategoryAlreadyExistsException();
 
         string newImagePath = category.ImagePath;
