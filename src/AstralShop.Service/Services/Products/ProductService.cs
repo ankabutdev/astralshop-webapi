@@ -1,19 +1,54 @@
-﻿using AstralShop.DataAccess.Utils;
+﻿using AstralShop.DataAccess.Interfaces;
+using AstralShop.DataAccess.Utils;
+using AstralShop.Domain.Entities.Products;
+using AstralShop.Domain.Exceptions.Products;
+using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Products;
+using AstralShop.Service.Interfaces.Common;
 using AstralShop.Service.Interfaces.Products;
+using AutoMapper;
 
 namespace AstralShop.Service.Services.Products;
 
 public class ProductService : IProductService
 {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
+
+    public ProductService(IUnitOfWork unitOfWork,
+        IMapper mapper, IFileService fileService)
+    {
+        this._unitOfWork = unitOfWork;
+        this._mapper = mapper;
+        this._fileService = fileService;
+    }
+
     public Task<long> CountAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<ProductRusultDto> CreateAsync(ProductCreateDto dto)
+    public async Task<ProductResultDto> CreateAsync(ProductCreateDto dto)
     {
-        throw new NotImplementedException();
+        var existingProduct = await _unitOfWork.ProductRepository
+            .SelectAsync(x => x.Name == dto.Name);
+        if (existingProduct != null)
+            throw new ProductNotFoundException();
+
+        string imagePath = await _fileService.UploadImageAsync(dto.ImagePath);
+
+        var category = _mapper.Map<Product>(dto);
+
+        category.ImagePath = imagePath;
+        category.UpdatedAt = TimeHelper.GetDateTime();
+
+        var addedProduct = await _unitOfWork.ProductRepository
+            .AddAsync(category);
+        await _unitOfWork.SaveAsync();
+
+        var result = _mapper.Map<ProductResultDto>(addedProduct);
+        return result;
     }
 
     public Task<bool> DeleteAsync(long productId)
@@ -21,17 +56,17 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<ProductRusultDto>> GetAllAsync(PaginationParams @params)
+    public Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ProductRusultDto> GetByIdAsync(long productId)
+    public Task<ProductResultDto> GetByIdAsync(long productId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ProductRusultDto> UpdateAsync(ProductUpdateDto dto)
+    public Task<ProductResultDto> UpdateAsync(ProductUpdateDto dto)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,6 @@
 ﻿namespace AstralShop.Service.DTOs.Products;
 
-public class ProductRusultDto
+public class ProductResultDto
 {
     public string Name { get; set; } = string.Empty;
 

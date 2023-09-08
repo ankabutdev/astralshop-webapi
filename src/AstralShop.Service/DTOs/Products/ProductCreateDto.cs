@@ -1,4 +1,6 @@
-﻿namespace AstralShop.Service.DTOs.Products;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace AstralShop.Service.DTOs.Products;
 
 public class ProductCreateDto
 {
@@ -10,7 +12,7 @@ public class ProductCreateDto
 
     public long CompanyId { get; set; }
 
-    public string ImagePath { get; set; } = string.Empty;
+    public IFormFile ImagePath { get; set; } = default!;
 
     public double UnitPrice { get; set; }
 }
