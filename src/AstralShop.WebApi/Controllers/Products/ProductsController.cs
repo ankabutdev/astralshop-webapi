@@ -22,6 +22,6 @@ public class ProductsController : ControllerBase
         => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync(ProductCreateDto dto)
+    public async Task<IActionResult> CreateAsync([FromForm] ProductCreateDto dto)
         => Ok(await _service.CreateAsync(dto));
 }

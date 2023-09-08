@@ -38,17 +38,15 @@ public class ProductService : IProductService
 
         string imagePath = await _fileService.UploadImageAsync(dto.ImagePath);
 
-        var category = _mapper.Map<Product>(dto);
+        var product = _mapper.Map<Product>(dto);
 
-        category.ImagePath = imagePath;
-        category.UpdatedAt = TimeHelper.GetDateTime();
+        product.ImagePath = imagePath;
+        product.CreatedAt = TimeHelper.GetDateTime();
 
-        var addedProduct = await _unitOfWork.ProductRepository
-            .AddAsync(category);
+        await _unitOfWork.ProductRepository.AddAsync(product);
         await _unitOfWork.SaveAsync();
 
-        var result = _mapper.Map<ProductResultDto>(addedProduct);
-        return result;
+        return _mapper.Map<ProductResultDto>(product);
     }
 
     public Task<bool> DeleteAsync(long productId)

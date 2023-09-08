@@ -32,6 +32,6 @@ public class MappingProfile : Profile
 
         CreateMap<ProductResultDto, ProductUpdateDto>().ReverseMap();
         CreateMap<ProductResultDto, ProductCreateDto>().ReverseMap();
-
+        // ...
     }
 }
