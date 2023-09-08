@@ -48,9 +48,18 @@ public class ProductService : IProductService
         return _mapper.Map<ProductResultDto>(product);
     }
 
-    public Task<bool> DeleteAsync(long productId)
+    public async Task<bool> DeleteAsync(long productId)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.ProductRepository.
+            SelectAsync(x => x.Id == productId);
+        if (product is null)
+            throw new ProductNotFoundException();
+
+        var result = await _fileService.DeleteImageAsync(product.ImagePath);
+
+        var dbResult = await _unitOfWork.ProductRepository.DeleteAsync(x => x == product);
+        await _unitOfWork.SaveAsync();
+        return dbResult;
     }
 
     public Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params)

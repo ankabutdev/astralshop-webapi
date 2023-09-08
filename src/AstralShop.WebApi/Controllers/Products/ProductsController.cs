@@ -21,7 +21,12 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
+    [HttpGet("count")]
+    public async Task<IActionResult> CountAsync()
+        => Ok(await _service.CountAsync());
+
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] ProductCreateDto dto)
         => Ok(await _service.CreateAsync(dto));
+
 }
