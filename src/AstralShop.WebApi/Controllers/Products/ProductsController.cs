@@ -29,4 +29,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> CreateAsync([FromForm] ProductCreateDto dto)
         => Ok(await _service.CreateAsync(dto));
 
+    [HttpDelete("productId")]
+    public async Task<IActionResult> DeleteAsync(long productId)
+        => Ok(await _service.DeleteAsync(productId));
 }
