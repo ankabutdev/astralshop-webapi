@@ -16,6 +16,4 @@ public interface ICompanyService
     public Task<IEnumerable<CompanyResultDto>> GetAllAsync(PaginationParams @params);
 
     public Task<long> CountAsync();
-
-    public Task<bool> UpdateImageAsync(long companyId, string imagePath);
 }

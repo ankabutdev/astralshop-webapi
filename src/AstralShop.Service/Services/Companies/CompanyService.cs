@@ -35,9 +35,4 @@ public class CompanyService : ICompanyService
     {
         throw new NotImplementedException();
     }
-
-    public Task<bool> UpdateImageAsync(long companyId, string imagePath)
-    {
-        throw new NotImplementedException();
-    }
 }
