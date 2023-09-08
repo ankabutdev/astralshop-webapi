@@ -7,6 +7,7 @@ using AstralShop.Service.DTOs.Products;
 using AstralShop.Service.Interfaces.Common;
 using AstralShop.Service.Interfaces.Products;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AstralShop.Service.Services.Products;
 
@@ -24,10 +25,8 @@ public class ProductService : IProductService
         this._fileService = fileService;
     }
 
-    public Task<long> CountAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<long> CountAsync()
+        => await _unitOfWork.ProductRepository.SelectAll().CountAsync();
 
     public async Task<ProductResultDto> CreateAsync(ProductCreateDto dto)
     {
