@@ -67,9 +67,14 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task<ProductResultDto> GetByIdAsync(long productId)
+    public async Task<ProductResultDto> GetByIdAsync(long productId)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.ProductRepository
+            .SelectAsync(x => x.Id == productId);
+        if (product is null)
+            throw new ProductNotFoundException();
+
+        return _mapper.Map<ProductResultDto>(product);
     }
 
     public Task<ProductResultDto> UpdateAsync(ProductUpdateDto dto)
