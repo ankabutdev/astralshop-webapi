@@ -40,5 +40,4 @@ public class CategoriesController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromForm] CategoryUpdateDto dto)
         => Ok(await _service.UpdateAsync(dto));
-
 }
