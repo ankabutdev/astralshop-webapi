@@ -11,9 +11,9 @@ public interface ICategoryService
 
     public Task<bool> DeleteAsync(long categoryId);
 
-    Task<CategoryResultDto> GetByIdAsync(long categoryId);
+    public Task<CategoryResultDto> GetByIdAsync(long categoryId);
 
-    Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params);
+    public Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params);
 
     public Task<long> CountAsync();
 
