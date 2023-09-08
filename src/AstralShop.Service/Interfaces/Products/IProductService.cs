@@ -11,11 +11,11 @@ public interface IProductService
 
     public Task<bool> DeleteAsync(long productId);
 
-    Task<ProductResultDto> GetByIdAsync(long productId);
+    public Task<ProductResultDto> GetByIdAsync(long productId);
 
-    Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params);
+    public Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params);
 
     public Task<long> CountAsync();
 
-    Task<bool> UpdateImageAsync(long productId, string imagePath);
+    public Task<bool> UpdateImageAsync(long productId, string imagePath);
 }
