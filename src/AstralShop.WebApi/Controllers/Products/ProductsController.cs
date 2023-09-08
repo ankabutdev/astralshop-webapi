@@ -21,6 +21,10 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
+    [HttpGet("{productId}")]
+    public async Task<IActionResult> GetByIdAsync(long productId)
+        => Ok(await _service.GetByIdAsync(productId));
+
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync()
         => Ok(await _service.CountAsync());
@@ -29,7 +33,9 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> CreateAsync([FromForm] ProductCreateDto dto)
         => Ok(await _service.CreateAsync(dto));
 
-    [HttpDelete("productId")]
+    [HttpDelete("{productId}")]
     public async Task<IActionResult> DeleteAsync(long productId)
         => Ok(await _service.DeleteAsync(productId));
+
+
 }
