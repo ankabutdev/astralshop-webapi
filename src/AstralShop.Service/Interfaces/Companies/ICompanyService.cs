@@ -17,5 +17,5 @@ public interface ICompanyService
 
     public Task<long> CountAsync();
 
-    public Task<>
+    public Task<bool> UpdateImageAsync(long companyId, string imagePath);
 }
