@@ -17,5 +17,5 @@ public interface ICategoryService
 
     public Task<long> CountAsync();
 
-    Task<bool> UpdateImageAsync(long categoryId, string imagePath);
+    public Task<bool> UpdateImageAsync(long categoryId, string imagePath);
 }
