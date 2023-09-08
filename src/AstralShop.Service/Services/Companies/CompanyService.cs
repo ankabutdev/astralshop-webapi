@@ -1,15 +1,29 @@
-﻿using AstralShop.DataAccess.Utils;
+﻿using AstralShop.DataAccess.Interfaces;
+using AstralShop.DataAccess.Utils;
 using AstralShop.Service.DTOs.Companies;
+using AstralShop.Service.Interfaces.Common;
 using AstralShop.Service.Interfaces.Companies;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AstralShop.Service.Services.Companies;
 
 public class CompanyService : ICompanyService
 {
-    public Task<long> CountAsync()
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
+
+    public CompanyService(IUnitOfWork unitOfWork,
+        IMapper mapper, IFileService fileService)
     {
-        throw new NotImplementedException();
+        this._unitOfWork = unitOfWork;
+        this._mapper = mapper;
+        this._fileService = fileService;
     }
+
+    public async Task<long> CountAsync()
+        => await _unitOfWork.CompanyRepository.SelectAll().CountAsync();
 
     public Task<CompanyResultDto> CreateAsync(CompanyCreateDto dto)
     {
