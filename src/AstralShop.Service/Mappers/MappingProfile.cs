@@ -1,6 +1,8 @@
 ﻿using AstralShop.Domain.Entities.Categories;
+using AstralShop.Domain.Entities.Companies;
 using AstralShop.Domain.Entities.Products;
 using AstralShop.Service.DTOs.Categories;
+using AstralShop.Service.DTOs.Companies;
 using AstralShop.Service.DTOs.Products;
 using AutoMapper;
 
@@ -32,6 +34,18 @@ public class MappingProfile : Profile
 
         CreateMap<ProductResultDto, ProductUpdateDto>().ReverseMap();
         CreateMap<ProductResultDto, ProductCreateDto>().ReverseMap();
+
+        // Companies
+        CreateMap<Company, CompanyCreateDto>().ReverseMap();
+        CreateMap<Company, CompanyUpdateDto>().ReverseMap();
+        CreateMap<Company, CompanyResultDto>().ReverseMap();
+
+        CreateMap<CompanyCreateDto, CompanyUpdateDto>().ReverseMap();
+        CreateMap<CompanyCreateDto, CompanyResultDto>().ReverseMap();
+
+        CreateMap<CompanyResultDto, CompanyUpdateDto>().ReverseMap();
+        CreateMap<CompanyResultDto, CompanyCreateDto>().ReverseMap();
+
         // ...
     }
 }
