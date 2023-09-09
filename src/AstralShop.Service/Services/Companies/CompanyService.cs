@@ -76,9 +76,14 @@ public class CompanyService : ICompanyService
         return _mapper.Map<IEnumerable<CompanyResultDto>>(resultDro);
     }
 
-    public Task<CompanyResultDto> GetByIdAsync(long companyId)
+    public async Task<CompanyResultDto> GetByIdAsync(long companyId)
     {
-        throw new NotImplementedException();
+        var company = await _unitOfWork.CompanyRepository
+            .SelectAsync(x => x.Id == companyId);
+        if (company is null)
+            throw new CompanyNotFoundException();
+
+        return _mapper.Map<CompanyResultDto>(company);
     }
 
     public Task<CompanyResultDto> UpdateAsync(CompanyUpdateDto dto)
