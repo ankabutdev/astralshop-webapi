@@ -1,4 +1,5 @@
-﻿using AstralShop.Service.Interfaces.Companies;
+﻿using AstralShop.Service.DTOs.Companies;
+using AstralShop.Service.Interfaces.Companies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AstralShop.WebApi.Controllers.Companies;
@@ -17,5 +18,9 @@ public class CompaniesController : ControllerBase
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync()
         => Ok(await _service.CountAsync());
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromForm] CompanyCreateDto dto)
+        => Ok(await _service.CreateAsync(dto));
 }
 
