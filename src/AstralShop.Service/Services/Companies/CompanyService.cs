@@ -97,7 +97,7 @@ public class CompanyService : ICompanyService
 
         var companyName = company.Name;
         var existingCompany = await _unitOfWork.CompanyRepository
-            .SelectAsync(x => x.Name == companyName);
+            .SelectAsync(x => x.Name == dto.Name);
 
         if (companyName != dto.Name && existingCompany is not null)
             throw new ProductAlreadyExistsException();
