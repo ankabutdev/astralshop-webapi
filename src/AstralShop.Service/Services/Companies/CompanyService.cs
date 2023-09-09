@@ -49,9 +49,18 @@ public class CompanyService : ICompanyService
         return _mapper.Map<CompanyResultDto>(company);
     }
 
-    public Task<bool> DeleteAsync(long companyId)
+    public async Task<bool> DeleteAsync(long companyId)
     {
-        throw new NotImplementedException();
+        var company = await _unitOfWork.CompanyRepository
+            .SelectAsync(x => x.Id == companyId);
+        if (company is null)
+            throw new CompanyNotFoundException();
+
+        var result = await _fileService.DeleteImageAsync(company.ImagePath);
+
+        var dbResult = await _unitOfWork.CompanyRepository.DeleteAsync(x => x == company);
+        await _unitOfWork.SaveAsync();
+        return dbResult;
     }
 
     public Task<IEnumerable<CompanyResultDto>> GetAllAsync(PaginationParams @params)
