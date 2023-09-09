@@ -33,7 +33,7 @@ public class CompanyService : ICompanyService
         var existingCompany = await _unitOfWork.CompanyRepository
             .SelectAsync(x => x.Name == dto.Name);
         if (existingCompany != null)
-            throw new CompanyNotFoundException();
+            throw new CompanyAlreadyExistsException();
 
         string imagePath = await _fileService.UploadImageAsync(dto.ImagePath);
 
