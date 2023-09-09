@@ -1,5 +1,8 @@
 ﻿using AstralShop.DataAccess.Interfaces;
 using AstralShop.DataAccess.Utils;
+using AstralShop.Domain.Entities.Companies;
+using AstralShop.Domain.Exceptions.Companies;
+using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Companies;
 using AstralShop.Service.Interfaces.Common;
 using AstralShop.Service.Interfaces.Companies;
@@ -25,9 +28,27 @@ public class CompanyService : ICompanyService
     public async Task<long> CountAsync()
         => await _unitOfWork.CompanyRepository.SelectAll().CountAsync();
 
-    public Task<CompanyResultDto> CreateAsync(CompanyCreateDto dto)
+    public async Task<CompanyResultDto> CreateAsync(CompanyCreateDto dto)
     {
-        throw new NotImplementedException();
+        var existingCompany = await _unitOfWork.CompanyRepository
+            .SelectAsync(x => x.Name == dto.Name);
+        if (existingCompany != null)
+            throw new CompanyNotFoundException();
+
+        string imagePath = await _fileService.UploadImageAsync(dto.ImagePath);
+
+        var company = _mapper.Map<Company>(dto);
+
+        company.ImagePath = imagePath;
+        company.CreatedAt = TimeHelper.GetDateTime();
+        company.UpdatedAt = TimeHelper.GetDateTime();
+
+        await _unitOfWork.CompanyRepository.AddAsync(company);
+        await _unitOfWork.SaveAsync();
+
+        return _mapper.Map<CompanyResultDto>(company);
+
+
     }
 
     public Task<bool> DeleteAsync(long companyId)

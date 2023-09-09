@@ -42,6 +42,7 @@ public class ProductService : IProductService
 
         product.ImagePath = imagePath;
         product.CreatedAt = TimeHelper.GetDateTime();
+        product.UpdatedAt = TimeHelper.GetDateTime();
 
         await _unitOfWork.ProductRepository.AddAsync(product);
         await _unitOfWork.SaveAsync();
