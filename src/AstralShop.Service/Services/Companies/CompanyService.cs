@@ -47,8 +47,6 @@ public class CompanyService : ICompanyService
         await _unitOfWork.SaveAsync();
 
         return _mapper.Map<CompanyResultDto>(company);
-
-
     }
 
     public Task<bool> DeleteAsync(long companyId)
