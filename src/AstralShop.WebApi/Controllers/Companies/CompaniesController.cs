@@ -22,5 +22,9 @@ public class CompaniesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] CompanyCreateDto dto)
         => Ok(await _service.CreateAsync(dto));
+
+    [HttpDelete("{productId}")]
+    public async Task<IActionResult> DeleteAsync(long productId)
+        => Ok(await _service.DeleteAsync(productId));
 }
 
