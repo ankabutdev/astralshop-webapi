@@ -38,7 +38,7 @@ public class CompaniesController : ControllerBase
         => Ok(await _service.DeleteAsync(productId));
 
     [HttpPut]
-    public async Task<IActionResult> UpdateaAsync(CompanyUpdateDto dto)
+    public async Task<IActionResult> UpdateaAsync([FromForm] CompanyUpdateDto dto)
         => Ok(await _service.UpdateAsync(dto));
 }
 
