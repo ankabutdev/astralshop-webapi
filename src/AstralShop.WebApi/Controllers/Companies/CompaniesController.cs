@@ -18,8 +18,12 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] int page)
+    public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
+
+    [HttpGet("{productId}")]
+    public async Task<IActionResult> GetByIdAsync(long productId)
+        => Ok(await _service.GetByIdAsync(productId));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync()
