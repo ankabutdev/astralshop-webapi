@@ -1,4 +1,5 @@
-﻿using AstralShop.Service.DTOs.Companies;
+﻿using AstralShop.DataAccess.Utils;
+using AstralShop.Service.DTOs.Companies;
 using AstralShop.Service.Interfaces.Companies;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,16 @@ namespace AstralShop.WebApi.Controllers.Companies;
 public class CompaniesController : ControllerBase
 {
     private readonly ICompanyService _service;
+    private readonly int _maxPageSize = 30;
 
     public CompaniesController(ICompanyService service)
     {
         this._service = service;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync([FromQuery] int page)
+        => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync()
@@ -26,5 +32,7 @@ public class CompaniesController : ControllerBase
     [HttpDelete("{productId}")]
     public async Task<IActionResult> DeleteAsync(long productId)
         => Ok(await _service.DeleteAsync(productId));
+
+
 }
 
