@@ -34,7 +34,7 @@ public class ProductService : IProductService
         var existingProduct = await _unitOfWork.ProductRepository
             .SelectAsync(x => x.Name == dto.Name);
         if (existingProduct != null)
-            throw new ProductNotFoundException();
+            throw new ProductAlreadyExistsException();
 
         string imagePath = await _fileService.UploadImageAsync(dto.ImagePath);
 

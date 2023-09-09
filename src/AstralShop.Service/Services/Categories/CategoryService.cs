@@ -34,7 +34,7 @@ public class CategoryService : ICategoryService
         var existingCategory = await _unitOfWork.CategoryRepository
             .SelectAsync(x => x.Name == dto.Name);
         if (existingCategory != null)
-            throw new CategoryNotFoundException();
+            throw new CategoryAlreadyExistsException();
 
         string imagePath = await _fileService.UploadImageAsync(dto.Image);
 
