@@ -63,9 +63,17 @@ public class CompanyService : ICompanyService
         return dbResult;
     }
 
-    public Task<IEnumerable<CompanyResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<CompanyResultDto>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var companies = _unitOfWork.CompanyRepository.SelectAll();
+        var paginationQuery = companies
+            .Skip(@params
+            .GetSkipCount())
+            .Take(@params.PageSize);
+
+        var resultDro = await paginationQuery.ToListAsync();
+
+        return _mapper.Map<IEnumerable<CompanyResultDto>>(resultDro);
     }
 
     public Task<CompanyResultDto> GetByIdAsync(long companyId)
