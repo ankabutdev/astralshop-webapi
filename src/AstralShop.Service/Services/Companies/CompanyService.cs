@@ -2,6 +2,8 @@
 using AstralShop.DataAccess.Utils;
 using AstralShop.Domain.Entities.Companies;
 using AstralShop.Domain.Exceptions.Companies;
+using AstralShop.Domain.Exceptions.Files;
+using AstralShop.Domain.Exceptions.Products;
 using AstralShop.Service.Common.Helpers;
 using AstralShop.Service.DTOs.Companies;
 using AstralShop.Service.Interfaces.Common;
@@ -86,8 +88,43 @@ public class CompanyService : ICompanyService
         return _mapper.Map<CompanyResultDto>(company);
     }
 
-    public Task<CompanyResultDto> UpdateAsync(CompanyUpdateDto dto)
+    public async Task<CompanyResultDto> UpdateAsync(CompanyUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var company = await _unitOfWork.CompanyRepository
+            .SelectAsync(x => x.Id == dto.Id);
+        if (company is null)
+            throw new CompanyNotFoundException();
+
+        var companyName = company.Name;
+        var existingCompany = await _unitOfWork.CompanyRepository
+            .SelectAsync(x => x.Name == companyName);
+
+        if (companyName != dto.Name && existingCompany is not null)
+            throw new ProductAlreadyExistsException();
+
+        string newImagePath = company.ImagePath;
+
+        if (dto.ImagePath is not null)
+        {
+            // Delete old image
+            var deleteResult = await _fileService.DeleteImageAsync(company.ImagePath);
+
+            if (!deleteResult)
+                throw new ImageNotFoundException();
+
+            // Upload new image
+            newImagePath = await _fileService.UploadImageAsync(dto.ImagePath);
+        }
+        // else company old image have to save
+
+        _mapper.Map(dto, company);
+
+        company.ImagePath = newImagePath;
+        company.UpdatedAt = TimeHelper.GetDateTime();
+
+        await _unitOfWork.CompanyRepository.UpdateAsync(company);
+        await _unitOfWork.SaveAsync();
+
+        return _mapper.Map<CompanyResultDto>(company);
     }
 }
