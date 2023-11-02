@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Configurations\Layers\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Filters\" />
-    <Folder Include="Configurations\" />
     <Folder Include="wwwroot\media\images\" />
     <Folder Include="wwwroot\media\audios\" />
     <Folder Include="wwwroot\media\avatars\" />
