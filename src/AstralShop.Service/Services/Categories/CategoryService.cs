@@ -92,9 +92,9 @@ public class CategoryService : ICategoryService
         return _mapper.Map<CategoryResultDto>(category);
     }
 
-    public async Task<CategoryResultDto> UpdateAsync(CategoryUpdateDto dto)
+    public async Task<CategoryResultDto> UpdateAsync(long categoryId, CategoryUpdateDto dto)
     {
-        var category = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Id == dto.Id);
+        var category = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Id == categoryId);
         if (category is null)
             throw new CategoryNotFoundException();
 

@@ -7,7 +7,7 @@ public interface ICategoryService
 {
     public Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto);
 
-    public Task<CategoryResultDto> UpdateAsync(CategoryUpdateDto dto);
+    public Task<CategoryResultDto> UpdateAsync(long categoryId, CategoryUpdateDto dto);
 
     public Task<bool> DeleteAsync(long categoryId);
 
