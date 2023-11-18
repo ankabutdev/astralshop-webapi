@@ -38,6 +38,6 @@ public class ProductsController : ControllerBase
         => Ok(await _service.DeleteAsync(productId));
 
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync([FromForm] ProductUpdateDto dto)
-        => Ok(await _service.UpdateAsync(dto));
+    public async Task<IActionResult> UpdateAsync(long productId, [FromForm] ProductUpdateDto dto)
+        => Ok(await _service.UpdateAsync(productId, dto));
 }

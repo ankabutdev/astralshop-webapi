@@ -30,7 +30,7 @@ public class CompanyService : ICompanyService
     public async Task<long> CountAsync()
         => await _unitOfWork.CompanyRepository.SelectAll().CountAsync();
 
-    public async Task<CompanyResultDto> CreateAsync(CompanyCreateDto dto)
+    public async Task<bool> CreateAsync(CompanyCreateDto dto)
     {
         var existingCompany = await _unitOfWork.CompanyRepository
             .SelectAsync(x => x.Name == dto.Name);
@@ -45,10 +45,10 @@ public class CompanyService : ICompanyService
         company.CreatedAt = TimeHelper.GetDateTime();
         company.UpdatedAt = TimeHelper.GetDateTime();
 
-        await _unitOfWork.CompanyRepository.AddAsync(company);
+        var result = await _unitOfWork.CompanyRepository.AddAsync(company);
         await _unitOfWork.SaveAsync();
 
-        return _mapper.Map<CompanyResultDto>(company);
+        return result is null ? false : true;
     }
 
     public async Task<bool> DeleteAsync(long companyId)
@@ -65,7 +65,7 @@ public class CompanyService : ICompanyService
         return dbResult;
     }
 
-    public async Task<IEnumerable<CompanyResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<Company>> GetAllAsync(PaginationParams @params)
     {
         var companies = _unitOfWork.CompanyRepository.SelectAll();
         var paginationQuery = companies
@@ -73,25 +73,27 @@ public class CompanyService : ICompanyService
             .GetSkipCount())
             .Take(@params.PageSize);
 
-        var resultDro = await paginationQuery.ToListAsync();
+        var resultDto = await paginationQuery.ToListAsync();
 
-        return _mapper.Map<IEnumerable<CompanyResultDto>>(resultDro);
+        return resultDto;
     }
 
-    public async Task<CompanyResultDto> GetByIdAsync(long companyId)
+    public async Task<Company> GetByIdAsync(long companyId)
     {
         var company = await _unitOfWork.CompanyRepository
             .SelectAsync(x => x.Id == companyId);
+
         if (company is null)
             throw new CompanyNotFoundException();
 
-        return _mapper.Map<CompanyResultDto>(company);
+        return company;
     }
 
-    public async Task<CompanyResultDto> UpdateAsync(CompanyUpdateDto dto)
+    public async Task<bool> UpdateAsync(long companyId, CompanyUpdateDto dto)
     {
         var company = await _unitOfWork.CompanyRepository
-            .SelectAsync(x => x.Id == dto.Id);
+            .SelectAsync(x => x.Id == companyId);
+
         if (company is null)
             throw new CompanyNotFoundException();
 
@@ -122,9 +124,9 @@ public class CompanyService : ICompanyService
         company.ImagePath = newImagePath;
         company.UpdatedAt = TimeHelper.GetDateTime();
 
-        await _unitOfWork.CompanyRepository.UpdateAsync(company);
+        var result = await _unitOfWork.CompanyRepository.UpdateAsync(company);
         await _unitOfWork.SaveAsync();
 
-        return _mapper.Map<CompanyResultDto>(company);
+        return result is null ? false : true;
     }
 }

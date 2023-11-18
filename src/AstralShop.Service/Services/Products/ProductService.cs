@@ -29,7 +29,7 @@ public class ProductService : IProductService
     public async Task<long> CountAsync()
         => await _unitOfWork.ProductRepository.SelectAll().CountAsync();
 
-    public async Task<ProductResultDto> CreateAsync(ProductCreateDto dto)
+    public async Task<bool> CreateAsync(ProductCreateDto dto)
     {
         var existingProduct = await _unitOfWork.ProductRepository
             .SelectAsync(x => x.Name == dto.Name);
@@ -44,10 +44,11 @@ public class ProductService : IProductService
         product.CreatedAt = TimeHelper.GetDateTime();
         product.UpdatedAt = TimeHelper.GetDateTime();
 
-        await _unitOfWork.ProductRepository.AddAsync(product);
+        var result = await _unitOfWork.ProductRepository.AddAsync(product);
         await _unitOfWork.SaveAsync();
 
-        return _mapper.Map<ProductResultDto>(product);
+        // ternary if
+        return result is null ? false : true;
     }
 
     public async Task<bool> DeleteAsync(long productId)
@@ -64,7 +65,7 @@ public class ProductService : IProductService
         return dbResult;
     }
 
-    public async Task<IEnumerable<ProductResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<Product>> GetAllAsync(PaginationParams @params)
     {
         var products = _unitOfWork.ProductRepository.SelectAll();
         var paginationQuery = products
@@ -74,23 +75,25 @@ public class ProductService : IProductService
 
         var resultDto = await paginationQuery.ToListAsync();
 
-        return _mapper.Map<IEnumerable<ProductResultDto>>(resultDto);
+        return resultDto;
     }
 
-    public async Task<ProductResultDto> GetByIdAsync(long productId)
+    public async Task<Product> GetByIdAsync(long productId)
     {
         var product = await _unitOfWork.ProductRepository
             .SelectAsync(x => x.Id == productId);
+
         if (product is null)
             throw new ProductNotFoundException();
 
-        return _mapper.Map<ProductResultDto>(product);
+        return product;
     }
 
-    public async Task<ProductResultDto> UpdateAsync(ProductUpdateDto dto)
+    public async Task<bool> UpdateAsync(long productId, ProductUpdateDto dto)
     {
         var product = await _unitOfWork.ProductRepository
-            .SelectAsync(x => x.Id == dto.Id);
+            .SelectAsync(x => x.Id == productId);
+
         if (product is null)
             throw new ProductNotFoundException();
 
@@ -121,10 +124,10 @@ public class ProductService : IProductService
         product.UpdatedAt = TimeHelper.GetDateTime();
         product.ImagePath = newImagePath;
 
-        await _unitOfWork.ProductRepository.UpdateAsync(product);
+        var result = await _unitOfWork.ProductRepository.UpdateAsync(product);
         await _unitOfWork.SaveAsync();
 
-        return _mapper.Map<ProductResultDto>(product);
+        return result is null ? false : true;
     }
 
     public async Task<bool> UpdateImageAsync(long productId, string imagePath)
