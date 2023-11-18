@@ -29,7 +29,7 @@ public class CategoryService : ICategoryService
     public async Task<long> CountAsync() =>
       await _unitOfWork.CategoryRepository.SelectAll().CountAsync();
 
-    public async Task<CategoryResultDto> CreateAsync(CategoryCreateDto dto)
+    public async Task<bool> CreateAsync(CategoryCreateDto dto)
     {
         var existingCategory = await _unitOfWork.CategoryRepository
             .SelectAsync(x => x.Name == dto.Name);
@@ -44,13 +44,13 @@ public class CategoryService : ICategoryService
 
         category.UpdatedAt = TimeHelper.GetDateTime();
 
-        var addedCategory = await _unitOfWork
+        var result = await _unitOfWork
             .CategoryRepository.AddAsync(category);
+
         await _unitOfWork.SaveAsync();
 
-        var resultDto = _mapper.Map<CategoryResultDto>(addedCategory);
-
-        return resultDto;
+        // ternary if
+        return result is null ? false : true;
     }
 
     public async Task<bool> DeleteAsync(long id)
@@ -69,7 +69,7 @@ public class CategoryService : ICategoryService
         return dbResult;
     }
 
-    public async Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<Category>> GetAllAsync(PaginationParams @params)
     {
         var categories = _unitOfWork.CategoryRepository.SelectAll();
         var paginatedQuery = categories
@@ -79,20 +79,21 @@ public class CategoryService : ICategoryService
 
         var resultDto = await paginatedQuery.ToListAsync();
 
-        return _mapper.Map<IEnumerable<CategoryResultDto>>(resultDto);
+        return resultDto;
     }
 
-    public async Task<CategoryResultDto> GetByIdAsync(long id)
+    public async Task<Category> GetByIdAsync(long id)
     {
         var category = await _unitOfWork.CategoryRepository
             .SelectAsync(x => x.Id == id);
+
         if (category is null)
             throw new CategoryNotFoundException();
 
-        return _mapper.Map<CategoryResultDto>(category);
+        return category;
     }
 
-    public async Task<CategoryResultDto> UpdateAsync(long categoryId, CategoryUpdateDto dto)
+    public async Task<bool> UpdateAsync(long categoryId, CategoryUpdateDto dto)
     {
         var category = await _unitOfWork.CategoryRepository.SelectAsync(u => u.Id == categoryId);
         if (category is null)
@@ -122,10 +123,11 @@ public class CategoryService : ICategoryService
         category.UpdatedAt = TimeHelper.GetDateTime();
         category.ImagePath = newImagePath;
 
-        await _unitOfWork.CategoryRepository.UpdateAsync(category);
+        var result = await _unitOfWork.CategoryRepository.UpdateAsync(category);
         await _unitOfWork.SaveAsync();
 
-        return _mapper.Map<CategoryResultDto>(category);
+        // ternary if
+        return result is null ? false : true;
     }
 
     public async Task<bool> UpdateImageAsync(long id, string imagePath)
