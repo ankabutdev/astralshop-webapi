@@ -60,9 +60,7 @@ public class FileService : IFileService
 
     public async Task<string> UploadDefaultImage()
     {
-        string subpath = Path.Combine(ROOTPATH, MEDIA, IMAGES);
-
-        string imagePath = Path.Combine(subpath, "default_image.jpg");
+        string imagePath = Path.Combine(MEDIA, IMAGES, "default_image.jpg");
 
         return imagePath;
     }
