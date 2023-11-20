@@ -10,7 +10,7 @@ public interface IUserService
 
     public Task<bool> UpdateAsync(UserUpdateDto dto);
 
-    public Task<bool> DeleteAsync(long userd);
+    public Task<bool> DeleteAsync(long userId);
 
     public Task<User> GetByIdAsync(long userId);
 

@@ -38,7 +38,7 @@ public class UserService : IUserService
         // if user exists return exception
         if (existsUser is not null)
             throw new UserAlreadyExistsException();
-        
+
         string imagePath;
 
         // if image is null, the default image is loaded
@@ -65,14 +65,22 @@ public class UserService : IUserService
         return result is null ? false : true;
     }
 
-    public Task<bool> DeleteAsync(long userd)
+    public Task<bool> DeleteAsync(long userId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<User>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<User>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var users = _unitOfWork.UserRepository.SelectAll();
+        var paginationQuery = users
+            .Skip(@params
+            .GetSkipCount())
+            .Take(@params.PageSize);
+
+        var result = await paginationQuery.ToListAsync();
+
+        return result;
     }
 
     public Task<User> GetByIdAsync(long userId)

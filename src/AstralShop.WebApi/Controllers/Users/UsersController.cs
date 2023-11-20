@@ -1,4 +1,5 @@
-﻿using AstralShop.Service.DTOs.Users;
+﻿using AstralShop.DataAccess.Utils;
+using AstralShop.Service.DTOs.Users;
 using AstralShop.Service.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace AstralShop.WebApi.Controllers.Users;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _service;
+    private readonly int _maxPageSize = 30;
 
     public UsersController(IUserService userService)
     {
@@ -16,8 +18,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync()
-        => Ok();
+    public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
+        => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromForm] UserCreateDto dto)
