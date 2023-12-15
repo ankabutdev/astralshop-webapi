@@ -11,7 +11,7 @@ public abstract class Human : Auditable
     public string LastName { get; set; } = string.Empty;
 
     [MaxLength(9)]
-    public string PasswordSeriaNumber { get; set; } = string.Empty;
+    public string PassportSeriaNumber { get; set; } = string.Empty;
 
     public bool IsMale { get; set; }
 

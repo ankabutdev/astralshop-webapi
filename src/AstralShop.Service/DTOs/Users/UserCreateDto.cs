@@ -26,7 +26,7 @@ public class UserCreateDto
     public string LastName { get; set; } = string.Empty;
 
     [MaxLength(9)]
-    public string PasswordSeriaNumber { get; set; } = string.Empty;
+    public string PassportSeriaNumber { get; set; } = string.Empty;
 
     public bool IsMale { get; set; }
 
@@ -36,5 +36,5 @@ public class UserCreateDto
 
     public string Region { get; set; } = string.Empty;
 
-    public IFormFile? ImagePath { get; set; }
+    public IFormFile? Image { get; set; }
 }

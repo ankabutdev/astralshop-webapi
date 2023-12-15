@@ -45,9 +45,24 @@ public class FileService : IFileService
         else return false;
     }
 
-    public Task<string> UploadAvatarAsync(IFormFile avatar)
+    public async Task<string> UploadAvatarAsync(IFormFile avatar)
     {
-        throw new NotImplementedException();
+        string newImageName = MediaHelper.MakeImageName(avatar.FileName);
+        string subpath = Path.Combine(MEDIA, AVATAR, newImageName);
+        string path = Path.Combine(ROOTPATH, subpath);
+
+        var stream = new FileStream(path, FileMode.Create);
+        await avatar.CopyToAsync(stream);
+        stream.Close();
+
+        return subpath;
+    }
+
+    public async Task<string> UploadDefaultImage()
+    {
+        string imagePath = Path.Combine(MEDIA, IMAGES, "default_image.jpg");
+
+        return imagePath;
     }
 
     public async Task<string> UploadImageAsync(IFormFile image)

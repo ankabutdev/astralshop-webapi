@@ -6,13 +6,13 @@ namespace AstralShop.Service.Interfaces.Users;
 
 public interface IUserService
 {
-    public Task<UserUpdateDto> CreateAsync(UserCreateDto dto);
+    public Task<bool> CreateAsync(UserCreateDto dto);
 
-    public Task<UserUpdateDto> UpdateAsync(UserUpdateDto dto);
+    public Task<bool> UpdateAsync(UserUpdateDto dto);
 
-    public Task<bool> DeleteAsync(long userd);
+    public Task<bool> DeleteAsync(long userId);
 
-    public Task<UserUpdateDto> GetByIdAsync(long userId);
+    public Task<User> GetByIdAsync(long userId);
 
     public Task<IEnumerable<User>> GetAllAsync(PaginationParams @params);
 
