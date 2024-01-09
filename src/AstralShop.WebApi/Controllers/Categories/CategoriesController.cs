@@ -38,6 +38,6 @@ public class CategoriesController : ControllerBase
         => Ok(await _service.DeleteAsync(categoryId));
 
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync([FromForm] CategoryUpdateDto dto)
-        => Ok(await _service.UpdateAsync(dto));
+    public async Task<IActionResult> UpdateAsync(long categoryId, [FromForm] CategoryUpdateDto dto)
+        => Ok(await _service.UpdateAsync(categoryId, dto));
 }
