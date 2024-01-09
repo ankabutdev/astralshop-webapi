@@ -72,6 +72,7 @@ public class CategoryService : ICategoryService
     public async Task<IEnumerable<CategoryResultDto>> GetAllAsync(PaginationParams @params)
     {
         var categories = _unitOfWork.CategoryRepository.SelectAll();
+
         var paginatedQuery = categories
             .Skip(@params
             .GetSkipCount())
