@@ -13,7 +13,9 @@ namespace AstralShop.DataAccess.Contexts;
 public class AstralShopDbContext : DbContext
 {
     public AstralShopDbContext(DbContextOptions<AstralShopDbContext> options) : base(options)
-    { }
+    {
+        Database.Migrate();
+    }
 
     public DbSet<Category> Categories { get; set; }
 
